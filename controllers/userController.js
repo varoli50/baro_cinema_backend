@@ -14,10 +14,10 @@ const cookieOpts = {
 
 async function register(req,res) {
     try {
-        const {username,email,psw } = req.body
-       //console.log(email,username,psw);
+        const {lastname,firstname,email,psw } = req.body
+        //console.log(lastname,firstname,email,psw);
     
-       if (!username || !email || !psw) {
+       if (!lastname || !firstname || !email || !psw) {
         return res.status(400).json({error: 'Nem lehet üres adatokat tartalmazó mező!'})
     }
 
@@ -29,7 +29,7 @@ async function register(req,res) {
 
     const hash = await bcrypt.hash(psw,10)
     //console.log(hash)
-    const {insertId} = await createUser(username,email,hash)
+    const {insertId} = await createUser(lastname,firstname,email,hash)
     //console.log(insertId);
     return res.status(201).json({message:'Sikeres regisztráció!', insertId})
     } catch (err) {
@@ -58,7 +58,7 @@ async function login(req,res) {
         }
 
         const token = jwt.sign(
-            {user_id: exists.user_id, email: exists.email, username: exists.username, role: exists.role},
+            {userId: exists.userId,lastname: exists.lastname, firstname: exists.firstname, email: exists.email, role: exists.role},
             config.JWT_SECRET,
            {expiresIn: config.JWT_EXPIRES_IN}
         )
@@ -71,5 +71,22 @@ async function login(req,res) {
         return res.status(500).json({error: 'Belépési hiba!', err: err})
     }   
 }
+async function whoAmI(req,res) {
+    try {
+        const {userId,lastname,firstname,email,role} = req.user
+        //console.log() 
+        res.status(200).json({userId: userId,lastname: lastname, firstname: firstname, email: email, role: role})
+    } catch (err) {
+        return res.status(500).json({error: "whoAmI server oldali hiba"})
+    }
+}
+async function logout(req,res) {
+    try {
+        return res.clearCookie(config.COOKIE_NAME, {path: '/'}).
+        status(200).json({message:" Sikeres kijelentkezés"})
+    } catch (err) {
+        return res.status(500).json({error: "Logout server oldali hiba"})
+    }
+}
 
-module.exports ={register,login}
+module.exports ={register,login, whoAmI,logout}
