@@ -13,4 +13,7 @@ app.use(cors({
 const userRoutes = require('./routes/userRoutes')
 app.use('/user', userRoutes)
 
+const movieRoutes = require('./routes/movieRoutes')
+app.use('/movies', movieRoutes)
+
 module.exports = app
