@@ -1,7 +1,7 @@
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 const database = require('../database/database')
-const {createMovie, findByTitle,deleteMovie} =require('../models/movieModels')
+const {createMovie, findByTitle,deleteMovie,getMovie} =require('../models/movieModels')
 
 async function addMovie(req,res) {
     try {
@@ -47,6 +47,20 @@ async function delMovie(req,res) {
     }
 }
 
+
+async function getAllMovie(req,res) {
+    try {
+        const result = await getMovie()
+        if (result.length === 0) {
+            return res.status(404).json({error: 'Nem található film az adatbázisban!'})
+        }
+        return res.status(200).json(result)
+
+    } catch (err) {
+        res.status(500).json({error:'Nem sikerült lekérni a filmeket az adatbázisból!'})
+    }
+}
+
 /*async function uploadMovieImg(req,res) {
     try {
         const { movieID}=req.params
@@ -66,4 +80,4 @@ async function delMovie(req,res) {
 }*/
 
 
-module.exports = {addMovie,delMovie}
+module.exports = {addMovie,delMovie,getAllMovie}

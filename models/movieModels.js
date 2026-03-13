@@ -21,7 +21,9 @@ async function deleteMovie(movieId) {
 }
 
 async function getMovie() {
-    
+    const sql = 'SELECT * FROM `movies`'
+    const [result] = await database.query(sql)
+    return result || null
 }
 
 /*async function insertMovieImg(movieID, movieimg) {
@@ -31,4 +33,4 @@ async function getMovie() {
 }*/
 
 
-module.exports = {createMovie,findByTitle,deleteMovie}
+module.exports = {createMovie,findByTitle,deleteMovie,getMovie}
