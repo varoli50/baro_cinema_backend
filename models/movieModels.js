@@ -13,17 +13,22 @@ async function createMovie(movieId, title, genre, duration, language) {
     return {insertId: result.insertId }
 }
 
-async function deleteMovie() {
-    
+async function deleteMovie(movieId) {
+    const sql = 'DELETE FROM movies WHERE `movies`.`movield` = ?'
+    console.log(movieId);
+    const [result] = await database.query(sql,[movieId])
+    return result
 }
 
 async function getMovie() {
     
 }
 
-async function uploadMovieImg() {
-    
-}
+/*async function insertMovieImg(movieID, movieimg) {
+    const sql = 'INSERT INTO `movieimage`(`movieID`, `movieimg`) VALUES (?,?)'
+    const [result] = await db.query(sql, [movieID,movieimg])
+    console.log(result); 
+}*/
 
 
-module.exports = {createMovie,findByTitle}
+module.exports = {createMovie,findByTitle,deleteMovie}

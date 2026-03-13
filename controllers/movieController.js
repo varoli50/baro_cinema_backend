@@ -1,6 +1,7 @@
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
-const {createMovie, findByTitle} =require('../models/movieModels')
+const database = require('../database/database')
+const {createMovie, findByTitle,deleteMovie} =require('../models/movieModels')
 
 async function addMovie(req,res) {
     try {
@@ -26,4 +27,43 @@ async function addMovie(req,res) {
     }
 }
 
-module.exports = {addMovie}
+
+async function delMovie(req,res) {
+    try {
+        const {movieId} = req.params
+        console.log(movieId)
+        const result = await deleteMovie(movieId)
+        
+        
+        if (result.affectedRows === 0) {
+            return res.status(400).json({error: 'Ezt már törölted'})
+        }
+        return res.status(204).send()
+    } catch (err) {
+        console.log(err);
+       
+
+        return res.status(500).json({error: ' Hiba a törléskor'})
+    }
+}
+
+/*async function uploadMovieImg(req,res) {
+    try {
+        const { movieID}=req.params
+        //console.log(userId,movieID);
+        const img = `uploads/${movieID}/${req.file.filename}`
+        //console.log(img);
+        const result = await insertJuryImg(movieID,img)
+        console.log(result);
+
+        return res.status(201).json({message:'Sikeres feltöltés!'})
+    } catch (err) {
+        if (err.code === 'ER_DUP_ENTRY') {
+            return res.status(409).json({error:'Már feltöltötted ezt a képet!'})
+        }
+        return res.status(500).json({error:'Képfeltöltési hiba!'})
+    }
+}*/
+
+
+module.exports = {addMovie,delMovie}
