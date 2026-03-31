@@ -31,4 +31,11 @@ async function reservedSeats(seats) {
     return result[0] || null
 }
 
-module.exports = {getSeats,getSeatsByNumbers,reservedSeats,pickedSeats,unpickSeats}
+async function deleteReservedSeats(seat_id) {
+    const sql = 'DELETE FROM seats WHERE seat_id=?'
+    console.log(seat_id);
+    const [result] = await database.query(sql,[seat_id])
+    return result
+}
+
+module.exports = {getSeats,getSeatsByNumbers,reservedSeats,pickedSeats,unpickSeats,deleteReservedSeats}

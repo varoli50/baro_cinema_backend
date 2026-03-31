@@ -26,11 +26,11 @@ async function getMovie() {
     return result || null
 }
 
-/*async function insertMovieImg(movieID, movieimg) {
-    const sql = 'INSERT INTO `movieimage`(`movieID`, `movieimg`) VALUES (?,?)'
-    const [result] = await db.query(sql, [movieID,movieimg])
+async function insertMovieImg(movieID, movieimage) {
+    const sql = 'INSERT INTO `movieimage`(`movieID`, `movieimg`) VALUES (NULL,?)'
+    const [result] = await db.query(sql, [movieID,movieimage])
     console.log(result); 
-}*/
+}
 
 
-module.exports = {createMovie,findByTitle,deleteMovie,getMovie}
+module.exports = {createMovie,findByTitle,deleteMovie,getMovie,insertMovieImg}

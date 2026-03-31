@@ -1,4 +1,4 @@
-const {getSeatsByNumbers, pickSeats} = require('../models/seatModels')
+const {getSeatsByNumbers, getSeats, pickedSeats, unpickSeats, reservedSeats, deleteReservedSeats} = require('../models/seatModels')
 
 
 async function seats(req,res) {
@@ -14,9 +14,11 @@ async function seats(req,res) {
         return res.status(200).json(result)
 
     } catch (err) {
+       //console.log(err);
         return res.status(500).json({
             error: "Nem sikerült lekérni a székeket!"
         })
+        
     }
 }
 
@@ -36,11 +38,11 @@ async function picked(req,res) {
 
         if (foglalt) {
             return res.status(400).json({
-                error: "Néhány szék már foglalt vagy kiválasztott!"
+                error: "Ez a szék már foglalt vagy kiválasztott!"
             })
         }
 
-        await pickSeats(seats)
+        await pickedSeats(seats)
 
         return res.status(200).json({
             message: "Szék/székek kiválasztva"
@@ -73,7 +75,7 @@ async function reserved(req,res) {
             })
         }
 
-        await reserveSeats(seats)
+        await reservedSeats(seats)
 
         return res.status(200).json({
             message: "Foglalás sikeres"
@@ -86,4 +88,22 @@ async function reserved(req,res) {
     }
 }
 
-module.exports = {seats,picked,reserved}
+async function cancel(req,res) {
+    try {
+        const {seat_id} = req.params
+        console.log(seat_id)
+        const result = await deleteReservedSeats(seat_id)
+        
+        
+        if (result.affectedRows === 0) {
+            return res.status(400).json({error: 'Ezt már törölted'})
+        }
+        return res.status(204).send()
+    } catch (err) {
+        console.log(err);
+       
+        return res.status(500).json({error: 'Hiba a törléskor'})
+    }
+}
+
+module.exports = {seats,picked,reserved,cancel}
