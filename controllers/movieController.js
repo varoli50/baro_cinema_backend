@@ -61,23 +61,33 @@ async function getAllMovie(req,res) {
     }
 }
 
-/*async function uploadMovieImg(req,res) {
+async function uploadMovieImg(req, res) {
     try {
-        const { movieID}=req.params
-        //console.log(userId,movieID);
-        const img = `uploads/${movieID}/${req.file.filename}`
-        //console.log(img);
-        const result = await insertJuryImg(movieID,img)
-        console.log(result);
+        const { movieID } = req.params;
 
-        return res.status(201).json({message:'Sikeres feltöltés!'})
-    } catch (err) {
-        if (err.code === 'ER_DUP_ENTRY') {
-            return res.status(409).json({error:'Már feltöltötted ezt a képet!'})
+        if (!req.file) {
+            return res.status(400).json({ error: 'Nincs feltöltött fájl!' });
         }
-        return res.status(500).json({error:'Képfeltöltési hiba!'})
+
+        const img = `uploads/${movieID}/${req.file.filename}`;
+
+        const result = await insertMovieImg(movieID, img);
+
+        return res.status(201).json({
+            message: 'Sikeres feltöltés!',
+            data: result
+        });
+
+    } catch (err) {
+        console.error(err);
+
+        if (err.code === 'ER_DUP_ENTRY') {
+            return res.status(409).json({ error: 'Már feltöltötted ezt a képet!' });
+        }
+
+        return res.status(500).json({ error: 'Képfeltöltési hiba!' });
     }
-}*/
+}
 
 
-module.exports = {addMovie,delMovie,getAllMovie}
+module.exports = {addMovie,delMovie,getAllMovie, uploadMovieImg}
