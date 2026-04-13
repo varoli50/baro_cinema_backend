@@ -1,6 +1,6 @@
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
-const { findByEmail, createUser} =require('../models/userModels')
+const { findByEmail, createUser,delUser,getAllUser, newPsw} =require('../models/userModels')
 const {config} = require('../config/dotenvConfig')
 
 
@@ -39,7 +39,7 @@ async function register(req,res) {
 async function login(req,res) {
     try {
         const {email,psw} = req.body
-        //console.log(email,psw);
+        console.log(email,psw);
         if (!email || !psw) {
             return res.status(400).json({error: 'Email és jelszó kötelező'})
         }
@@ -56,18 +56,19 @@ async function login(req,res) {
         if (!ok) {
             return res.status(401).json({ error:'Hibás jelszó'})
         }
-
         const token = jwt.sign(
             {userId: exists.userId,lastname: exists.lastname, firstname: exists.firstname, email: exists.email, role: exists.role},
             config.JWT_SECRET,
            {expiresIn: config.JWT_EXPIRES_IN}
         )
-        //console.log(token);
+        console.log(token);
 
         res.cookie(config.COOKIE_NAME,token,cookieOpts)
         return res.status(200).json({message: 'Sikeres login'})
 
     } catch (err) {
+        console.log(err);
+        
         return res.status(500).json({error: 'Belépési hiba!', err: err})
     }   
 }
@@ -89,4 +90,77 @@ async function logout(req,res) {
     }
 }
 
-module.exports ={register,login, whoAmI,logout}
+// összes user lekérése
+async function allUsers(req, res) {
+    try {
+        const result = await getAllUser()
+
+        return res.status(200).json(result)
+    } catch (err) {
+        console.log(err)
+        return res.status(500).json({ error: 'Összes user lekérése server oldali hiba'})
+    }
+}
+
+// egy felhasználó törlése
+async function deleteUser(req, res) {
+    try {
+        const { userId } = req.params
+        console.log(userId)
+        const result = await delUser(userId)
+        
+        return res.status(200).json({ message: 'Sikeres törlés' })
+        
+    } catch (err) {
+        console.log(err)
+        return res.status(500).json({ error: 'Felhasználó törlésekor server oldali hiba' })
+    }
+}
+
+//async function resetPassword(req, res) {
+    try {
+
+        const { oldPassword, newPassword } = req.body
+        const email = req.user.email
+         console.log(email);
+
+        if (!oldPassword || !newPassword) {
+            return res.status(400).json({
+                error: "Minden mező kötelező"
+            })
+        }
+
+        const user = await findByEmail(email)
+        // console.log(user);
+        // console.log(user.psw);
+        // console.log(ok);
+        const ok = await bcrypt.compare(oldPassword, user.psw)
+        // console.log(config.JWT_SECRET);
+        // console.log(oldPassword, user.psw);
+        // console.log(ok);
+        if (!ok) {
+            return res.status(401).json({
+                error: "Régi jelszó hibás"
+            })
+        }
+
+        const hashedPassword = await bcrypt.hash(newPassword, 10)
+
+        await newPsw(email, hashedPassword)
+
+        res.status(200).json({
+            message: "Jelszó módosítva"
+        })
+
+    } catch (err) {
+
+        console.log(err)
+
+        res.status(500).json({
+            error: "Jelszó módosítás hiba"
+        })
+
+    }
+//}
+
+module.exports ={register,login, whoAmI,logout,allUsers,deleteUser,resetPassword}
