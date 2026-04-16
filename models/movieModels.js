@@ -26,9 +26,9 @@ async function getMovie() {
     return result || null
 }
 
-async function insertMovieImg(movieID, movieimage) {
-    const sql = 'INSERT INTO `movieimage`(`movieID`, `movieimg`) VALUES (NULL,?)'
-    const [result] = await db.query(sql, [movieID,movieimage])
+async function insertMovieImg(movieID, movieimg) {
+    const sql = ' INSERT INTO movieimage (movieID, movieimg) VALUES (?, ?)'
+    const [result] = await database.query(sql, [movieID,movieimg])
     console.log(result); 
 }
 

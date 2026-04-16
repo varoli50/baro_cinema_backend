@@ -1,7 +1,7 @@
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 const database = require('../database/database')
-const {createMovie, findByTitle,deleteMovie,getMovie} =require('../models/movieModels')
+const {createMovie, findByTitle,deleteMovie,getMovie, insertMovieImg} =require('../models/movieModels')
 
 async function addMovie(req,res) {
     try {
@@ -69,9 +69,7 @@ async function uploadMovieImg(req, res) {
             return res.status(400).json({ error: 'Nincs feltöltött fájl!' });
         }
 
-        const img = `uploads/${movieID}/${req.file.filename}`;
-
-        const result = await insertMovieImg(movieID, img);
+        const result = await insertMovieImg(movieID, req.file);
 
         return res.status(201).json({
             message: 'Sikeres feltöltés!',
