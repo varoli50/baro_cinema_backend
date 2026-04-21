@@ -1,4 +1,4 @@
-const bcrypt = require('bcrypt')
+const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
 const { findByEmail, createUser,delUser,getAllUser, newPsw} =require('../models/userModels')
 const {config} = require('../config/dotenvConfig')
@@ -117,7 +117,7 @@ async function deleteUser(req, res) {
     }
 }
 
-//async function resetPassword(req, res) {
+async function resetPassword(req, res) {
     try {
 
         const { oldPassword, newPassword } = req.body
@@ -161,6 +161,6 @@ async function deleteUser(req, res) {
         })
 
     }
-//}
+}
 
 module.exports ={register,login, whoAmI,logout,allUsers,deleteUser,resetPassword}

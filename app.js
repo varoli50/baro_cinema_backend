@@ -8,8 +8,8 @@ app.use(cookieParser())
 app.use(cors({
     origin:['http://127.0.0.1:5173',
         'http://localhost:5173',
-    'http://192.168.9.110:5173',
-    '192.168.1.16:5173'],
+    'http://192.168.9.110:5173'
+    ],
     credentials:true
 }))
 
@@ -18,7 +18,7 @@ app.use('/user', userRoutes)
 
 const movieRoutes = require('./routes/movieRoutes')
 app.use('/movies', movieRoutes)
-//app.use('/api/movie-images', movieRoutes)
+app.use("/api/uploads", express.static("uploads"), movieRoutes);
 
 const seatRoutes = require('./routes/seatRoutes')
 app.use('/seats', seatRoutes)
