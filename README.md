@@ -1,18 +1,17 @@
 # 🎬 Baro Cinema Backend
 
-Backend API for the Baro Cinema application.
-Handles movie management, seat reservations, and user authentication.
+Ez a BARO Cinema backend tartozó dokumentáció. Ez az oldal a Cinema City-t vette inspirációul. 
 
 ---
 
 ## 🚀 Features
 
-* 🎥 Movie management (CRUD)
-* 💺 Seat reservation system
-* 👤 User authentication & authorization
-* 🛡️ Admin-protected routes
-* 🖼️ Image upload support (movie images)
-* 🌐 CORS configured for frontend integration
+* 🎥 Film menedzsment
+* 💺 Szék foglalási lehetőség
+* 👤 Felhasználó és felhatalmazás kezelés
+* 🛡️ Admin-védett útvonalak
+* 🖼️ Képfeltöltési lehetőség (movie images)
+* 🌐 Konfigurálva frontend integrációhoz CORS-al
 
 ---
 
@@ -107,7 +106,8 @@ npm start
 Hozz létre egy `.env` fájlt a gyökérben:
 
 ```
-.env adatok 
+HOST=https://nodejs211.dszcbaross.edu.hu
+PORT=22011
 ```
 
 ---
