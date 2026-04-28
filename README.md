@@ -1,6 +1,6 @@
 # 🎬 Baro Cinema Backend
 
-Ez a BARO Cinema backend tartozó dokumentáció. Ez az oldal a Cinema City-t vette inspirációul. 
+Ez a BARO Cinema backendhez tartozó dokumentáció. Ez az oldal a Cinema City-t vette inspirációul. 
 
 ---
 
@@ -191,8 +191,8 @@ Engedélyezett origin-ek:
 npm test
 ```
 
-(vagy manuális API teszt Postman-nel)
-Ide kellenek Postman képek
+POSTMAN tesztek
+https://documenter.getpostman.com/view/48099665/2sBXqJJfou
 
 ---
 
